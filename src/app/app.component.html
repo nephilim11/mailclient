@@ -1,0 +1,110 @@
+<div class="container-fluid">
+  <div class="row" *ngIf="hidden">
+    <div class="col-md-12 , getFile" *ngIf="hidden">
+      <input type="file" (change)="fileData($event)" />
+    </div>
+  </div>
+  <div class="row , card , mail-header" *ngIf="!display">
+    <div class="col-md-12 , card-body">
+      <div class="row">
+        <div class="col-md-12 , mail-subject">
+          <h3>{{ subject }}</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <p>
+            To: {{ senderName }};
+            <span class="recipients">{{ recipients }}</span>
+          </p>
+
+          <p>Cc: {{ Cc }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card , mail-body" *ngIf="!display">
+    <!-- <textarea [attr.data]="selectedFileBlob" type="application/pdf"></textarea> -->
+    <pdf-viewer
+      [src]="selectedFileBlob"
+      [original-size]="false"
+      width="300px"
+      height="300px"
+      type="application/pdf"
+    ></pdf-viewer>
+    <!-- <a  [href]="selectedFileBlob">view</a> -->
+    <!-- <embed #pdfview src="" width="300px" height="300px"> -->
+    <!-- <img [src]="image" width="100px" height="100px" [hidden]="block" /> -->
+    <!-- <div mat-dialog-content>
+      <div id="my-container" class="ng-scope pdfobject-container">
+        <iframe
+          #pdfview
+          src=""
+          type="application/pdf"
+          width="100%"
+          height="100%"
+          style="overflow: auto"
+        >
+        </iframe>
+      </div>
+      <div mat-dialog-actions>
+        <div mat-button mat-dialog-close>close</div>
+      </div>
+    </div> -->
+    <div *ngFor="let len of attachment; let i = index">
+      <button class="attachment" (click)="downloadAttachments(i)">
+        {{ attachment[i].name }}
+      </button>
+      <mat-icon
+        aria-hidden="false"
+        (click)="openFullscreen( i)"
+        aria-label="Example home icon"
+        >visibility</mat-icon
+      >
+    </div>
+    <!-- <div id="my-container" class="ng-scope pdfobject-container">
+      <iframe
+        #pdfview
+        src=""
+        type="application/pdf"
+        width="100%"
+        height="100%"
+        style="overflow: auto"
+      >
+      </iframe>
+    </div> -->
+
+    <div class="card-body , mail-body-content" [innerText]="body"></div>
+  </div>
+  <!-- <div
+    class="modal"
+    tabindex="-1"
+    role="dialog"
+    [ngStyle]="{ display: displayStyle }"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div id="my-container" class="ng-scope pdfobject-container">
+          <iframe #pdfview src="" type="application/pdf"> </iframe>
+        </div>
+        <img [src]="image" width="100px" height="100px" [hidden]="block" />
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" (click)="closePopup()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+<ng-template #modalRef>
+  <mat-dialog-content class="mat-typography">
+    <iframe #pdfview src="" type="application/pdf"> </iframe>
+    <img [src]="image" width="100px" height="100px" [hidden]="block" />
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Close</button>
+  </mat-dialog-actions>
+</ng-template>
+</div>
