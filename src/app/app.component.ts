@@ -1,10 +1,17 @@
-import { Component, ElementRef, ViewChild, TemplateRef } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  SecurityContext,
+  ViewChild,
+} from '@angular/core';
 import { MSGReader } from 'wl-msg-reader';
-import { DomSanitizer } from '@angular/platform-browser';
-import { AnonymousSubject } from 'rxjs/internal/Subject';
 import * as fileSaver from 'file-saver';
-import * as pdfMake from 'pdfmake/build/pdfmake';
+
+import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
+import { Data, Router } from '@angular/router';
+import { DataService } from './data.service';
+import { ViewAttachmentComponent } from './viewAttachment/viewAttachment.component';
 
 @Component({
   selector: 'app-root',
@@ -28,16 +35,21 @@ export class AppComponent {
   msgReader!: any;
   filedata!: any;
   attachment: any;
-  image!: any;
+  image: any;
+  imageView: any;
   block: boolean = true;
   selectedFileBlob!: any;
   pdfUrl!: any;
   blobURL!: any;
-  @ViewChild('pdfview') pdfview!: ElementRef<HTMLIFrameElement>;
-  @ViewChild('modalRef', { read: TemplateRef }) modalRef:TemplateRef<any>;
- 
+  view!: any;
   blob!: any;
-  constructor(private sanitizer: DomSanitizer, public dialog: MatDialog) {}
+  constructor(
+    private sanitizer: DomSanitizer,
+    public dialog: MatDialog,
+    private dataservice: DataService,
+    private viewAttachment: ViewAttachmentComponent,
+    private router: Router
+  ) {}
   _base64ToArrayBuffer(value: any) {
     var binary_string = window.atob(value);
     var len = binary_string.length;
@@ -45,83 +57,60 @@ export class AppComponent {
     for (var i = 0; i < len; i++) {
       bytes[i] = binary_string.charCodeAt(i);
     }
-
     return bytes.buffer;
   }
-
   filepdf(file: any) {
     return new TextDecoder('utf-8').decode(file);
   }
-  fileReader = new FileReader();
-  /*  */
   fileData(eve: any) {
     this.display = false;
     const selectedFile = eve.target.files[0];
-    this.fileReader.readAsDataURL(selectedFile);
-
-    this.fileReader.onload = () => {
-      const value = this.fileReader.result;
-      var tmp = new String(this.fileReader.result).split(',')[1];
+    let fileReader = new FileReader();
+    fileReader.readAsDataURL(selectedFile);
+    fileReader.onload = () => {
+      const value = fileReader.result;
+      var tmp = new String(fileReader.result).split(',')[1];
       this.msgReader = new MSGReader(this._base64ToArrayBuffer(tmp));
       this.filedata = this.msgReader.getFileData();
-
       this.senderName = this.filedata.senderName;
       this.subject = this.filedata.subject;
       this.recipients = this.filedata.recipients[0].name;
       this.Cc = this.filedata.recipients[1].name;
       this.body = this.filedata.body;
       this.attachedFile = this.filedata.attachments[0];
-
       this.length = this.filedata.attachments.length;
       this.attachment = this.filedata.attachments;
     };
   }
-  /* downloading attachment files */
   downloadAttachments(i: number) {
     var file = this.msgReader.getAttachment(this.filedata.attachments[i]);
     this.blob = new Blob([file.content]);
     this.blobURL = URL.createObjectURL(this.blob);
-
     fileSaver.saveAs(this.blob, file.fileName);
   }
   viewAttachement(i: number) {
     var file = this.msgReader.getAttachment(this.filedata.attachments[i]);
-
     if (this.filedata.attachments[i].extension == '.pdf') {
       this.blob = new Blob([file.content], { type: 'application/pdf' });
       this.blobURL = URL.createObjectURL(this.blob);
-
       this.pdfUrl = this.sanitizer.bypassSecurityTrustUrl(this.blobURL);
-
       this.selectedFileBlob = this.pdfUrl.changingThisBreaksApplicationSecurity;
-      this.pdfview.nativeElement.src = this.selectedFileBlob;
-      // this.dialog.open(AppComponent)
-      this.displayStyle = "block";
     } else {
       var file = this.msgReader.getAttachment(this.filedata.attachments[i]);
-      this.blob = new Blob([file.content]);
+      this.blob = new Blob([file.content], { type: 'image/png' });
       this.blobURL = URL.createObjectURL(this.blob);
-
-      this.image = this.sanitizer.bypassSecurityTrustUrl(this.blobURL);
-      this.block = false;
-      this.displayStyle = "block";
+      this.pdfUrl = this.sanitizer.bypassSecurityTrustUrl(this.blobURL);
+      this.selectedFileBlob = this.pdfUrl.changingThisBreaksApplicationSecurity;
     }
+    this.dataservice.subject.next(this.selectedFileBlob);
   }
-  displayStyle = "none";
-
-  // openPopup() {
-  //   this.displayStyle = "block";
-  // }
-  closePopup() {
-    this.displayStyle = "none";
-  }
-
-  openFullscreen( i: any) {
+  viewModule(i: number) {
     this.viewAttachement(i);
-    const dialogRef = this.dialog.open(this.modalRef);
-
-    dialogRef.afterClosed().subscribe((result:any) => {
-      console.log(`Dialog result: ${result}`);
-    });
+    this.dialog.open(ViewAttachmentComponent);
+  }
+  print(i: number) {
+    this.viewAttachement(i);
+    this.dataservice.blob.next(this.blobURL);
+    this.viewAttachment.print();
   }
 }
