@@ -39,7 +39,6 @@
 
       <div class="row">
         <div class="col-md-12">
-<<<<<<< HEAD
           <div class="logo">
             <b>{{ logo }}</b>
           </div>
@@ -47,13 +46,6 @@
             <p class="sender">{{ senderName }}</p>
             <p>
               To : <span *ngFor="let c of Cc; let i = index"> {{ c }},</span>
-=======
-          <p>
-            To: {{ senderName }};
-
-            <span class="recipients">{{ recipients }}</span>
-          </p>
->>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
 
               &nbsp;
             </p>
@@ -63,17 +55,12 @@
     </div>
   </div>
   <div class="card , mail-body" *ngIf="!display">
-<<<<<<< HEAD
     <div class="attachments" *ngFor="let len of attachment; let i = index">
       <button
         class="attachment"
         title="Download"
         (click)="downloadAttachments(i)"
       >
-=======
-    <div *ngFor="let len of attachment; let i = index">
-      <button class="attachment" (click)="downloadAttachments(i)">
->>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
         {{ attachment[i].name }}
       </button>
 
@@ -85,14 +72,10 @@
         title="View"
         >visibility</mat-icon
       >
-<<<<<<< HEAD
 
       <mat-icon class="attachmentPrint" title="Print" (click)="print(i)"
         >print</mat-icon
       >
-=======
-      <button class="attachment" (click)="print(i)">print</button>
->>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
     </div>
     <div class="card-body , mail-body-content" [innerText]="body"></div>
   </div>
