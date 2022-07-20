@@ -1,7 +1,10 @@
 import {
   Component,
   ElementRef,
+<<<<<<< HEAD
   OnInit,
+=======
+>>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
   SecurityContext,
   ViewChild,
 } from '@angular/core';
@@ -13,8 +16,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { Data, Router } from '@angular/router';
 import { DataService } from './data.service';
 import { ViewAttachmentComponent } from './viewAttachment/viewAttachment.component';
+<<<<<<< HEAD
 import { HttpClient } from '@angular/common/http';
 
+=======
+>>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
 
 @Component({
   selector: 'app-root',
@@ -51,13 +57,17 @@ export class AppComponent implements OnInit{
   blobURL!: any;
   view!: any;
   blob!: any;
+<<<<<<< HEAD
   fileStore$:any
   filetake:any
   logo!:any;
+=======
+>>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
   constructor(
     private sanitizer: DomSanitizer,
     public dialog: MatDialog,
     private dataservice: DataService,
+<<<<<<< HEAD
     private viewAttachment: ViewAttachmentComponent
   ) {}
   ngOnInit():any
@@ -75,6 +85,11 @@ export class AppComponent implements OnInit{
       })
   }
   /*convert base64 to arraybuffer */
+=======
+    private viewAttachment: ViewAttachmentComponent,
+    private router: Router
+  ) {}
+>>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
   _base64ToArrayBuffer(value: any) {
     var binary_string = window.atob(value);
     var len = binary_string.length;
@@ -84,6 +99,7 @@ export class AppComponent implements OnInit{
     }
     return bytes.buffer;
   }
+<<<<<<< HEAD
  
   /*get msg file data*/
   fileData() {
@@ -110,6 +126,31 @@ export class AppComponent implements OnInit{
       this.logo=this.senderName.split(' ')[0][0]+this.senderName.split(' ')[1][0]
   }
    /* download msg file attachments*/
+=======
+  filepdf(file: any) {
+    return new TextDecoder('utf-8').decode(file);
+  }
+  fileData(eve: any) {
+    this.display = false;
+    const selectedFile = eve.target.files[0];
+    let fileReader = new FileReader();
+    fileReader.readAsDataURL(selectedFile);
+    fileReader.onload = () => {
+      const value = fileReader.result;
+      var tmp = new String(fileReader.result).split(',')[1];
+      this.msgReader = new MSGReader(this._base64ToArrayBuffer(tmp));
+      this.filedata = this.msgReader.getFileData();
+      this.senderName = this.filedata.senderName;
+      this.subject = this.filedata.subject;
+      this.recipients = this.filedata.recipients[0].name;
+      this.Cc = this.filedata.recipients[1].name;
+      this.body = this.filedata.body;
+      this.attachedFile = this.filedata.attachments[0];
+      this.length = this.filedata.attachments.length;
+      this.attachment = this.filedata.attachments;
+    };
+  }
+>>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
   downloadAttachments(i: number) {
     var file = this.msgReader.getAttachment(this.filedata?.attachments[i]);
     this.blob = new Blob([file.content]);
@@ -118,14 +159,23 @@ export class AppComponent implements OnInit{
   }
   /* view msg file attachments*/
   viewAttachement(i: number) {
+<<<<<<< HEAD
     var file = this.msgReader.getAttachment(this.filedata?.attachments[i]);
     if (this.filedata?.attachments[i].extension == '.pdf') {
+=======
+    var file = this.msgReader.getAttachment(this.filedata.attachments[i]);
+    if (this.filedata.attachments[i].extension == '.pdf') {
+>>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
       this.blob = new Blob([file.content], { type: 'application/pdf' });
       this.blobURL = URL.createObjectURL(this.blob);
       this.pdfUrl = this.sanitizer.bypassSecurityTrustUrl(this.blobURL);
       this.selectedFileBlob = this.pdfUrl.changingThisBreaksApplicationSecurity;
     } else {
+<<<<<<< HEAD
       var file = this.msgReader.getAttachment(this.filedata?.attachments[i]);
+=======
+      var file = this.msgReader.getAttachment(this.filedata.attachments[i]);
+>>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
       this.blob = new Blob([file.content], { type: 'image/png' });
       this.blobURL = URL.createObjectURL(this.blob);
       this.pdfUrl = this.sanitizer.bypassSecurityTrustUrl(this.blobURL);
@@ -133,12 +183,18 @@ export class AppComponent implements OnInit{
     }
     this.dataservice.subject.next(this.selectedFileBlob);
   }
+<<<<<<< HEAD
   /*view attachments in pop up */
+=======
+>>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
   viewModule(i: number) {
     this.viewAttachement(i);
     this.dialog.open(ViewAttachmentComponent);
   }
+<<<<<<< HEAD
   /* print attachments in pop up*/
+=======
+>>>>>>> 10e36b1df335c4b28725f6df6a914327fa46e66a
   print(i: number) {
     this.viewAttachement(i);
     this.dataservice.blob.next(this.blobURL);
