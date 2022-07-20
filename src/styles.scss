@@ -35,6 +35,6 @@ $mail-document-viewer-theme: mat.define-light-theme((
 
 @import url("https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css");
 /* You can add global styles to this file, and also import other style files */
-
+@import "~carbon-components/scss/globals/scss/styles.scss";
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

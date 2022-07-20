@@ -1,0 +1,32 @@
+[{
+    "casenumber": 62368299,
+    "agentname": "John, Martin",
+    "outlookview":"./assets/msgFiles/hello.msg"
+},
+{
+    "casenumber": 62368300,
+    "agentname": "Peter, Parkar",
+    "outlookview":"./assets/msgFiles/outLook2.msg"
+},
+{
+    "casenumber": 62368301,
+    "agentname": "Stephen, George",
+    "outlookview":"./assets/msgFiles/BGV Process.msg"
+},
+{
+    "casenumber": 62368301,
+"agentname": "Stephen, George",
+"outlookview":"./assets/msgFiles/check.msg"
+},
+{
+    "casenumber": 62368301,
+"agentname": "Stephen, George",
+"outlookview":"./assets/msgFiles/OutLook1.msg"
+},
+{
+    "casenumber": 62368301,
+"agentname": "Stephen, George",
+"outlookview":"./assets/msgFiles/Mail.msg"
+}
+
+]
